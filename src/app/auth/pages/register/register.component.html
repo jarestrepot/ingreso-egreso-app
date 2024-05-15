@@ -22,7 +22,7 @@
                   <span class="input-group-text">
                     <i
                       [class.accepted]="this.registerForm.controls['name'].valid"
-                      [class.touched]="this.registerForm.controls['name'].touched"
+                      [class.touched]="this.registerForm.controls['name'].touched && this.registerForm.controls['name'].invalid"
                       class="fa fa-check-circle fa-green"></i>
                   </span>
                 </div>
@@ -46,7 +46,7 @@
                   <span class="input-group-text">
                     <i
                       [class.accepted]="this.registerForm.controls['password'].valid"
-                      [class.touched]="this.registerForm.controls['password'].touched"
+                      [class.touched]="this.registerForm.controls['password'].touched && this.registerForm.controls['password'].invalid"
                       class="fa fa-check-circle"
                     ></i>
                   </span>
@@ -69,7 +69,7 @@
                   <span class="input-group-text">
                     <i
                       [class.accepted]="this.registerForm.controls['confirmPassword'].valid"
-                      [class.touched]="this.registerForm.controls['confirmPassword'].touched"
+                      [class.touched]="this.registerForm.controls['confirmPassword'].touched && this.registerForm.controls['confirmPassword'].invalid"
                       class="fa fa-check-circle"></i>
                   </span>
                 </div>
