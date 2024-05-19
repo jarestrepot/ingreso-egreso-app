@@ -25,9 +25,6 @@ export class AuthService {
       .subscribe({
         next: ( user ) => {
           if (user) {
-            console.log( user.uid );
-            console.log( user.email )
-            console.log( user.photoURL )
             this.userData = user;
             localStorage.setItem('userData', JSON.stringify(this.userData));
           } else {
