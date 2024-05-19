@@ -1,8 +1,8 @@
-export class User {
+export class UserEntity {
   constructor(
     private uid: string,
-    private email: string,
     private name: string,
+    private email: string,
   ){
 
   }

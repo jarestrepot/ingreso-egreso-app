@@ -1,8 +1,9 @@
 import { Injectable, NgZone } from '@angular/core';
-import { User } from '@auth/interfaces/user.interface';
+import * as User from '@auth/interfaces/user.interface';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AuthError } from './errorSevrice.class';
 import { map } from 'rxjs';
+import { UserEntity } from 'src/app/models/usuario.model';
 
 
 @Injectable({
@@ -33,11 +34,15 @@ export class AuthService {
         }
       })
   }
-  async createUser({ email, password }: User){
+  async createUser({ email, name, password }: User.UserRegister){
     try {
-      const userCredentials = await this.firebaseAuthenticationService.createUserWithEmailAndPassword(email, password);
-      this.userData = userCredentials.user;
-      return this.userData;
+      const { user } = await this.firebaseAuthenticationService.createUserWithEmailAndPassword(email, password);
+      this.userData = user;
+      if( user ){
+        const newUser = new UserEntity( user?.uid, name , email );
+        return this.userData;
+      }
+      //!! ERROR
     } catch (error: any) {
       const errorAuth = new AuthError('User creation error', 'Please check if the form fields are correct', undefined, { message: error.message });
       await errorAuth.getSwalModalError();
@@ -61,7 +66,7 @@ export class AuthService {
     }
   }
 
-  loginUser({ email, password}: User){
+  loginUser({ email, password }: User.UserLogin){
     // User?
     return this.firebaseAuthenticationService.signInWithEmailAndPassword(email, password);
   }
