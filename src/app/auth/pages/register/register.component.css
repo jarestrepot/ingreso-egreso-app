@@ -1,6 +1,8 @@
 .accepted{
   color:green;
+  margin: .4rem;
 }
 .touched{
   color:red;
+  margin: .4rem;
 }

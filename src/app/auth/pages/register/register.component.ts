@@ -1,5 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
+import { Router } from '@angular/router';
 import { User } from '@auth/interfaces/user.interface';
 import { AuthService } from '@auth/services/auth.service';
 
@@ -13,6 +14,7 @@ export class RegisterComponent implements OnInit {
   public registerForm!:FormGroup;
   private fb:FormBuilder = inject(FormBuilder);
   private serviceAuth = inject(AuthService);
+  private router = inject(Router);
   ngOnInit(): void {
     this.registerForm = this.fb.group({
       name: ['', [Validators.required, Validators.email]],
@@ -32,7 +34,12 @@ export class RegisterComponent implements OnInit {
       password: this.registerForm.controls['password'].value as string,
       confirmPassword: this.registerForm.controls['confirmPassword'].value as string
     }
-    this.serviceAuth.createUser( user )
-    this.registerForm.reset()
+    this.serviceAuth.createUser( user );
+    if( !this.serviceAuth.userInfo() ){
+      this.registerForm.markAllAsTouched();
+      this.registerForm.reset();
+      return;
+    }
+    this.router.navigateByUrl('/dashboard');
   }
 }

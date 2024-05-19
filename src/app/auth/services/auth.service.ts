@@ -1,16 +1,15 @@
 import { Injectable, NgZone } from '@angular/core';
 import { User } from '@auth/interfaces/user.interface';
-import { Firestore, collectionData, collection } from '@angular/fire/firestore';
-import { GoogleAuthProvider } from '@angular/fire/auth';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { Router } from '@angular/router';
+import { AuthError } from './errorSevrice.class';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
 
-  private userData!: any;
+  private userData!: any | undefined;
   constructor(
     private ngZone: NgZone,
     private router: Router,
@@ -32,9 +31,10 @@ export class AuthService {
     this.firebaseAuthenticationService.createUserWithEmailAndPassword( email, password )
       .then( (userCredentials) => {
         this.userData = userCredentials.user
-        this.router.navigate(['/dashboard'])
+        // this.router.navigate(['/dashboard'])
       }).catch( (error) => {
-        alert(error.message)
+        const errorAuth = new AuthError('User creation error', 'Please check if the form fields are correct', undefined, { message: error.message });
+        errorAuth.getSwalModalError();
       });
   }
 
@@ -42,6 +42,9 @@ export class AuthService {
     return this.userData;
   }
 
+  loginUser({ email, password}: User){
+    return this.firebaseAuthenticationService.signInWithEmailAndPassword(email, password);
+  }
 
 }
 
