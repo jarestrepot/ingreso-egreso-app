@@ -2,6 +2,8 @@ import { Injectable, NgZone } from '@angular/core';
 import { User } from '@auth/interfaces/user.interface';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { AuthError } from './errorSevrice.class';
+import { map } from 'rxjs';
+
 
 @Injectable({
   providedIn: 'root'
@@ -14,16 +16,25 @@ export class AuthService {
     private firebaseAuthenticationService: AngularFireAuth // Service to Fire
   ) {
     //Observa Setear el localStorage con los datos del usuario
-    this.firebaseAuthenticationService.authState.subscribe({
-      next: (user) => {
-        if(user){
-          this.userData = user;
-          localStorage.setItem('userData', JSON.stringify(this.userData));
-        }else{
-          localStorage.setItem('userData', 'null');
+    this.initAuthListener()
+  }
+
+
+  initAuthListener(){
+    this.firebaseAuthenticationService.authState
+      .subscribe({
+        next: ( user ) => {
+          if (user) {
+            console.log( user.uid );
+            console.log( user.email )
+            console.log( user.photoURL )
+            this.userData = user;
+            localStorage.setItem('userData', JSON.stringify(this.userData));
+          } else {
+            localStorage.setItem('userData', 'null');
+          }
         }
-      }
-    })
+      })
   }
   async createUser({ email, password }: User){
     try {
@@ -54,7 +65,14 @@ export class AuthService {
   }
 
   loginUser({ email, password}: User){
+    // User?
     return this.firebaseAuthenticationService.signInWithEmailAndPassword(email, password);
+  }
+
+  isAuthenticated(){
+    return this.firebaseAuthenticationService.authState.pipe(
+      map( fUser => fUser !== null ),
+    )
   }
 
 }
