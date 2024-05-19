@@ -1,3 +1,4 @@
+
 import Swal from "sweetalert2";
 
 export class AuthError extends Error {
@@ -57,7 +58,7 @@ export class AuthError extends Error {
           icon: "error",
           title: this.name,
           text: this.message,
-          footer: this.cause.message
+          footer: this.cause.message,
         }
       );
     }
@@ -65,4 +66,5 @@ export class AuthError extends Error {
       return this;
     }
   }
+
 }

@@ -1,8 +1,10 @@
 import { Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
+import { SwalHelpers } from '@auth/services/SwalHelpers';
 import { AuthService } from '@auth/services/auth.service';
 import { AuthError } from '@auth/services/errorSevrice.class';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-login',
@@ -27,6 +29,9 @@ export class LoginComponent {
       this.loginForm.markAllAsTouched();
       return;
     };
+    // await Swetter alert
+    const swal = new SwalHelpers();
+    swal.showAlertEmptyOptions();
     try {
       await this.authService.loginUser( {
         email: this.loginForm.get('email')?.value,
@@ -37,8 +42,8 @@ export class LoginComponent {
       const errorAuth = new AuthError('Not Found', 'User not Found', undefined, { message: error.message });
       this.loginForm.reset();
       this.loginForm.markAllAsTouched();
-      errorAuth.getSwalModalError();
+      await errorAuth.getSwalModalError();
     }
-
+    swal.closeSwal();
   }
 }

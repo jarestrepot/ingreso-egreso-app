@@ -2,7 +2,9 @@ import { Component, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import { User } from '@auth/interfaces/user.interface';
+import { SwalHelpers } from '@auth/services/SwalHelpers';
 import { AuthService } from '@auth/services/auth.service';
+import { AuthError } from '@auth/services/errorSevrice.class';
 
 @Component({
   selector: 'app-register',
@@ -23,23 +25,32 @@ export class RegisterComponent implements OnInit {
     })
   }
 
-  createUser(){
+  async createUser(){
     // TODO: Crear un service de errores. + confirmación de password
     if( this.registerForm.errors ) {
       this.registerForm.markAllAsTouched()
       return;
     }
+    const swal = new SwalHelpers();
+    swal.showAlertEmptyOptions();
     const user:User = {
       email: this.registerForm.controls['name'].value as string,
       password: this.registerForm.controls['password'].value as string,
       confirmPassword: this.registerForm.controls['confirmPassword'].value as string
     }
-    this.serviceAuth.createUser( user );
-    if( !this.serviceAuth.userInfo() ){
+    try {
+      const response = await this.serviceAuth.createUser( user );
+      if ( response instanceof AuthError ){
+        this.registerForm.reset();
+        this.registerForm.markAllAsTouched();
+        return;
+      }
+      this.router.navigateByUrl('/dashboard');
+    } catch (error) {
       this.registerForm.markAllAsTouched();
       this.registerForm.reset();
-      return;
     }
-    this.router.navigateByUrl('/dashboard');
+
+    swal.closeSwal();
   }
 }

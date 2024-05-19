@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
-import { Route, Routes } from '@angular/router';
+import { Route, Router, Routes } from '@angular/router';
+import { AuthService } from '@auth/services/auth.service';
 import { routesDashboard } from '@dashboard/dashboard-routing.module';
 
 @Component({
@@ -10,7 +11,10 @@ import { routesDashboard } from '@dashboard/dashboard-routing.module';
 export class SidebarComponent implements OnInit {
 
   public routes:Route[] | Routes[] = [];
-  constructor() {
+  constructor(
+    private authService:AuthService,
+    private router:Router
+  ) {
     this.routes = routesDashboard.map( ( route ) => {
       if( !route.children )
         return [];
@@ -18,6 +22,15 @@ export class SidebarComponent implements OnInit {
     }).flat();
   }
   ngOnInit(): void {
-    
+
+  }
+
+  async logout() {
+    try {
+      await this.authService.logOut();
+      this.router.navigate(['/login']);
+    } catch (error) {
+      console.log(error);
+    }
   }
 }
