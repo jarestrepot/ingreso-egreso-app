@@ -1,8 +1,10 @@
 import { Injectable, NgZone } from '@angular/core';
 import * as User from '@auth/interfaces/user.interface';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
+import { addDoc, DocumentData, DocumentReference, Firestore, collection, collectionData, doc, deleteDoc, getDoc } from '@angular/fire/firestore';
+
 import { AuthError } from './errorSevrice.class';
-import { map } from 'rxjs';
+import { Observable, map } from 'rxjs';
 import { UserEntity } from 'src/app/models/usuario.model';
 
 
@@ -11,13 +13,15 @@ import { UserEntity } from 'src/app/models/usuario.model';
 })
 export class AuthService {
 
-  private userData!: any | undefined;
+  userData!: any | undefined;
+  #document!: DocumentReference<DocumentData, DocumentData>;
   constructor(
     private ngZone: NgZone,
-    private firebaseAuthenticationService: AngularFireAuth // Service to Fire
+    private firebaseAuthenticationService: AngularFireAuth, // Service to Fire
+    private fireStore: Firestore
   ) {
     //Observa Setear el localStorage con los datos del usuario
-    this.initAuthListener()
+    this.initAuthListener();
   }
 
 
@@ -40,6 +44,8 @@ export class AuthService {
       this.userData = user;
       if( user ){
         const newUser = new UserEntity( user?.uid, name , email );
+        const userCollection = collection( this.fireStore, 'users' ); //Pasamos la Firebase, name collection
+        addDoc(userCollection, { ...newUser }); //Collection, value( Don`t entity value ) AddDoc in the collection.
         return this.userData;
       }
       //!! ERROR
@@ -50,7 +56,23 @@ export class AuthService {
     }
   }
 
-  get userInfo(){
+  getUsers(): Observable<User.UserDatabase[]> {
+    const usersFirebase = collection( this.fireStore, 'users');
+    return collectionData( usersFirebase, { idField: 'id' } ) as Observable<User.UserDatabase[]>;
+  }
+
+  deleteUsers( user: User.UserDatabase ){
+    const userDocRef = doc( this.fireStore, `users/${user.id}`);
+    return deleteDoc( userDocRef );
+  }
+
+  async getUser( id: string ){
+    const userDocRef = (await getDoc(doc(this.fireStore, `users/${id}`))).data() as User.UserDatabase;
+    this.userData = userDocRef;
+    return this.userData;
+  }
+
+  getuserInfo(){
     return this.userData;
   }
 
@@ -75,6 +97,10 @@ export class AuthService {
     return this.firebaseAuthenticationService.authState.pipe(
       map( fUser => fUser !== null ),
     )
+  }
+
+  initAuth(): string{
+    return JSON.parse(localStorage.getItem('userData') ?? '');
   }
 
 }

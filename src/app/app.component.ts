@@ -11,6 +11,6 @@ export class AppComponent {
 
   constructor( private authService: AuthService ){
     // Listener User.
-    console.log(this.authService )
+    // console.log( this.authService )
   }
 }

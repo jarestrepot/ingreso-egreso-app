@@ -10,3 +10,10 @@ export interface UserRegister{
   confirmPassword?: string;
 }
 
+
+export interface UserDatabase{
+  id: string;
+  email: string;
+  name: string;
+}
+
