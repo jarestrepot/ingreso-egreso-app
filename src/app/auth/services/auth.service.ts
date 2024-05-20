@@ -4,7 +4,7 @@ import { AngularFireAuth } from '@angular/fire/compat/auth';
 import { addDoc, DocumentData, DocumentReference, Firestore, collection, collectionData, doc, deleteDoc, getDoc } from '@angular/fire/firestore';
 
 import { AuthError } from './errorSevrice.class';
-import { Observable, map } from 'rxjs';
+import { Observable, map, tap } from 'rxjs';
 import { UserEntity } from 'src/app/models/usuario.model';
 import { UserR } from '@auth/interfaces/user.response.interface';
 
@@ -25,19 +25,18 @@ export class AuthService {
     this.initAuthListener();
   }
 
-
   initAuthListener(){
-    this.firebaseAuthenticationService.authState
-      .subscribe({
-        next: ( user ) => {
+    return this.firebaseAuthenticationService.authState
+      .pipe(
+        tap((user) => this.userData = user ),
+        tap( (user) => {
           if (user) {
-            this.userData = user;
             localStorage.setItem('userData', JSON.stringify(this.userData));
           } else {
             localStorage.setItem('userData', 'null');
           }
-        },
-      });
+        })
+      );
   }
   async createUser({ email, name, password }: User.UserRegister){
     try {
