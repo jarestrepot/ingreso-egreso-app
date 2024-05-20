@@ -1,10 +1,15 @@
 import { Injectable, NgZone } from '@angular/core';
 import * as User from '@auth/interfaces/user.interface';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { addDoc, DocumentData, DocumentReference, Firestore, collection, collectionData, doc, deleteDoc, getDoc } from '@angular/fire/firestore';
+import { Firestore, collection, collectionData, doc, deleteDoc, getDoc, setDoc } from '@angular/fire/firestore';
+
+// NgRx Store
+import { Store } from '@ngrx/store';
+import { AppState } from 'src/app/store/app.reducer';
+import * as UserStore from '@auth/authStore/auth.actions';
 
 import { AuthError } from './errorSevrice.class';
-import { Observable, map, tap } from 'rxjs';
+import { Observable, Subscription, map, tap } from 'rxjs';
 import { UserEntity } from 'src/app/models/usuario.model';
 import { UserR } from '@auth/interfaces/user.response.interface';
 
@@ -14,12 +19,13 @@ import { UserR } from '@auth/interfaces/user.response.interface';
 })
 export class AuthService {
 
+  #userSubcription!: Subscription;
   userData!: any | undefined;
-  #document!: DocumentReference<DocumentData, DocumentData>;
   constructor(
     private ngZone: NgZone,
     private firebaseAuthenticationService: AngularFireAuth, // Service to Fire
-    private fireStore: Firestore
+    private fireStore: Firestore,
+    private store: Store<AppState>
   ) {
     //Observa Setear el localStorage con los datos del usuario
     this.initAuthListener();
@@ -29,26 +35,37 @@ export class AuthService {
     return this.firebaseAuthenticationService.authState
       .pipe(
         tap((user) => this.userData = user ),
-        tap( (user) => {
+        tap( async (user) => {
           if (user) {
             localStorage.setItem('userData', JSON.stringify(this.userData));
+            try {
+              const firebaseData:User.UserDatabase = await this.getUser(user.uid);
+              const userEntity:UserEntity = UserEntity.fromFirebase(firebaseData); // Instancia static
+              this.store.dispatch(UserStore.setUser({ userEntity }));
+            } catch (error) {
+              localStorage.setItem('userData', 'null');
+              // Hacer en unset del usuario.
+              this.store.dispatch(UserStore.unSetuser());
+            }
           } else {
             localStorage.setItem('userData', 'null');
+            // Hacer en unset del usuario.
+            this.store.dispatch( UserStore.unSetuser() );
           }
         })
       );
   }
+
   async createUser({ email, name, password }: User.UserRegister){
     try {
       const { user } = await this.firebaseAuthenticationService.createUserWithEmailAndPassword(email, password);
-      this.userData = user;
       if( user ){
-        const newUser = new UserEntity( user?.uid, name , email );
-        const userCollection = collection( this.fireStore, 'users' ); //Pasamos la Firebase, name collection
-        addDoc(userCollection, { ...newUser }); //Collection, value( Don`t entity value ) AddDoc in the collection.
+        this.userData = user;
+        const newUser = new UserEntity( user.uid, name , email );
+        const userDocRef = doc(this.fireStore, `users`, user.uid); // Add uid the path. Ensure the creation of the route with the firebase id
+        await setDoc(userDocRef, { ...newUser });
         return this.userData;
       }
-      //!! ERROR
     } catch (error: any) {
       const errorAuth = new AuthError('User creation error', 'Please check if the form fields are correct', undefined, { message: error.message });
       await errorAuth.getSwalModalError();
@@ -66,10 +83,10 @@ export class AuthService {
     return deleteDoc( userDocRef );
   }
 
-  async getUser( id: string ){
-    const userDocRef = (await getDoc(doc(this.fireStore, `users/${id}`))).data() as User.UserDatabase;
+  async getUser( id: string ): Promise<User.UserDatabase>{
+    const userDocRef = (await getDoc(doc(this.fireStore, `/users/${id}`))).data() as User.UserDatabase;
     this.userData = userDocRef;
-    return this.userData;
+    return userDocRef;
   }
 
   getuserInfo(){

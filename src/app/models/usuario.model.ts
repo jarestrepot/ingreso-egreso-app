@@ -1,13 +1,24 @@
+import * as User from '@auth/interfaces/user.interface';
+
 export class UserEntity {
+  /**
+   * Statcic method
+   * @param userDatabase
+   * @returns this
+   */
+  static fromFirebase({ id, name, email, }: User.UserDatabase ){
+    return new UserEntity(id, name, email);
+  }
+
   constructor(
-    private uid: string,
-    private name: string,
+    private id: string,
     private email: string,
+    private name: string,
   ){
 
   }
-  getUid(): string {
-    return this.uid;
+  getId(): string {
+    return this.id;
   }
   getEmail(): string {
     return this.email;
