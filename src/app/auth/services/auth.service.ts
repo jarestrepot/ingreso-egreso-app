@@ -6,6 +6,7 @@ import { addDoc, DocumentData, DocumentReference, Firestore, collection, collect
 import { AuthError } from './errorSevrice.class';
 import { Observable, map } from 'rxjs';
 import { UserEntity } from 'src/app/models/usuario.model';
+import { UserR } from '@auth/interfaces/user.response.interface';
 
 
 @Injectable({
@@ -35,8 +36,8 @@ export class AuthService {
           } else {
             localStorage.setItem('userData', 'null');
           }
-        }
-      })
+        },
+      });
   }
   async createUser({ email, name, password }: User.UserRegister){
     try {
@@ -99,8 +100,10 @@ export class AuthService {
     )
   }
 
-  initAuth(): string{
-    return JSON.parse(localStorage.getItem('userData') ?? '');
+  initAuth(){
+    const userJson = JSON.parse(localStorage.getItem('userData') ?? '') as UserR;
+    this.userData = userJson;
+    return userJson;
   }
 
 }

@@ -2,7 +2,7 @@ export interface UserResponse {
   operationType: string;
   credential: null;
   additionalUserInfo: AdditionalUserInfo;
-  user: User;
+  user: UserR;
 }
 
 export interface AdditionalUserInfo {
@@ -14,7 +14,7 @@ export interface AdditionalUserInfo {
 export interface Profile {
 }
 
-export interface User {
+export interface UserR {
   uid: string;
   email: string;
   emailVerified: boolean;
