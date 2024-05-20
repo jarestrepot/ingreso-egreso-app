@@ -10,6 +10,5 @@ export interface AppState {
 // Reducers
 export const appReducers: ActionReducerMap<AppState> = {
   ui: UI.uiReducer,
-  
 }
 

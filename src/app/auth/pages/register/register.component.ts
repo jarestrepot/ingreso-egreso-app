@@ -1,10 +1,13 @@
-import { ChangeDetectionStrategy, Component, OnInit, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import * as User from '@auth/interfaces/user.interface';
 import { SwalHelpers } from '@auth/services/SwalHelpers';
 import { AuthService } from '@auth/services/auth.service';
 import { AuthError } from '@auth/services/errorSevrice.class';
+import { Store } from '@ngrx/store';
+import * as ui from '@shared/ui.actions';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-register',
@@ -12,19 +15,27 @@ import { AuthError } from '@auth/services/errorSevrice.class';
   styleUrls: ['./register.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class RegisterComponent implements OnInit {
+export class RegisterComponent implements OnInit, OnDestroy {
 
   public registerForm!:FormGroup;
   private fb:FormBuilder = inject(FormBuilder);
   private serviceAuth = inject(AuthService);
   private router = inject(Router);
+  #store = inject(Store);
+  #uiSubscription: Subscription[] = [];
+  public isLoadingUi:boolean = false;
+
   ngOnInit(): void {
     this.registerForm = this.fb.group({
       email: ['', [Validators.required, Validators.email]],
       name: ['', [Validators.required, Validators.minLength(3)]],
       password: ['', [Validators.required, Validators.minLength(6)]],
       confirmPassword: ['', [Validators.required, Validators.minLength(6)]], // TODO: Validator password
-    })
+    });
+    const uiSub = this.#store.select('ui').subscribe({
+      next: ({ isLoading }) => this.isLoadingUi = isLoading
+    });
+    this.#uiSubscription.push( uiSub );
   }
 
   async createUser(){
@@ -33,6 +44,8 @@ export class RegisterComponent implements OnInit {
       this.registerForm.markAllAsTouched()
       return;
     }
+
+    this.#store.dispatch( ui.isLoading() )
     // Instance swal
     const swal = new SwalHelpers();
     swal.showAlertEmptyOptions();
@@ -53,8 +66,15 @@ export class RegisterComponent implements OnInit {
     } catch (error) {
       this.registerForm.markAllAsTouched();
       this.registerForm.reset();
+    }finally{
+      this.#store.dispatch( ui.stopLoading() );
     }
     // Close instance
     swal.closeSwal();
   }
+
+  ngOnDestroy(): void {
+    this.#uiSubscription.forEach( uiSub => uiSub.unsubscribe() );
+  }
+
 }

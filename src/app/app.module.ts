@@ -1,10 +1,13 @@
-import { NgModule } from '@angular/core';
+import { NgModule, isDevMode } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { AngularFireModule } from '@angular/fire/compat';
 
 // NgRx
 import { StoreModule } from '@ngrx/store';
 import { appReducers } from './store/app.reducer';
+
+// Devtools
+import { StoreDevtoolsModule } from '@ngrx/store-devtools';
 
 // Custom document firebase
 import { firebaseProviderFrom } from './firebase.config';
@@ -24,7 +27,8 @@ import { environments } from 'src/environments/environmets';
     AppRoutingModule,
     AuthModule,
     AngularFireModule.initializeApp(environments.firebase),
-    StoreModule.forRoot({}, {}) // injection NullErrorInjection
+    StoreDevtoolsModule.instrument({ maxAge: 50, logOnly: !isDevMode() }),
+    // StoreModule.forRoot({}, {}) // injection NullErrorInjection
   ],
   providers: [
     firebaseProviderFrom
