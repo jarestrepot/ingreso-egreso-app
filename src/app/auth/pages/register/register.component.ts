@@ -8,6 +8,7 @@ import { AuthError } from '@auth/services/errorSevrice.class';
 import { Store } from '@ngrx/store';
 import * as ui from '@shared/ui.actions';
 import { Subscription } from 'rxjs';
+import { AppState } from 'src/app/store/app.reducer';
 
 @Component({
   selector: 'app-register',
@@ -21,7 +22,7 @@ export class RegisterComponent implements OnInit, OnDestroy {
   private fb:FormBuilder = inject(FormBuilder);
   private serviceAuth = inject(AuthService);
   private router = inject(Router);
-  #store = inject(Store);
+  #store = inject<Store<AppState>>(Store);
   #uiSubscription: Subscription[] = [];
   public isLoadingUi:boolean = false;
 
@@ -46,9 +47,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
     }
 
     this.#store.dispatch( ui.isLoading() )
-    // Instance swal
-    const swal = new SwalHelpers();
-    swal.showAlertEmptyOptions();
     const user:User.UserRegister = {
       email: this.registerForm.controls['email'].value as string,
       name: this.registerForm.controls['name'].value as string,
@@ -69,8 +67,6 @@ export class RegisterComponent implements OnInit, OnDestroy {
     }finally{
       this.#store.dispatch( ui.stopLoading() );
     }
-    // Close instance
-    swal.closeSwal();
   }
 
   ngOnDestroy(): void {

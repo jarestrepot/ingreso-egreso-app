@@ -19,9 +19,9 @@ import { AppState } from 'src/app/store/app.reducer';
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class LoginComponent implements OnDestroy {
+
   loginForm!: FormGroup;
   isLoading: boolean = false;
-
   #uiSubcriptions: Subscription[] = [];
 
   constructor(
@@ -49,15 +49,11 @@ export class LoginComponent implements OnDestroy {
 
     // Dispatch state
     this.store.dispatch( ui.isLoading() );
-    // await Swetter alert
-    const swal = new SwalHelpers();
-    swal.showAlertEmptyOptions();
     try {
       await this.authService.loginUser( {
         email: this.loginForm.get('email')?.value,
         password: this.loginForm.get('password')?.value
       });
-      // this.store.dispatch( ui.stopLoading() );
       this.router.navigate(['/dashboard']);
     } catch (error: any) {
       const errorAuth = new AuthError('Not Found', 'User not Found', undefined, { message: error.message });
@@ -67,7 +63,6 @@ export class LoginComponent implements OnDestroy {
     }finally{
       this.store.dispatch(ui.stopLoading());
     }
-    swal.closeSwal();
   }
 
   ngOnDestroy(): void {

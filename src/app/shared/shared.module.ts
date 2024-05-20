@@ -4,6 +4,7 @@ import { FooterComponent } from './footer/footer.component';
 import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { RouterModule } from '@angular/router';
+import { IsLoadingButtonComponent } from './components/is-loading-button/is-loading-button.component';
 
 
 
@@ -11,7 +12,8 @@ import { RouterModule } from '@angular/router';
   declarations: [
     FooterComponent,
     NavBarComponent,
-    SidebarComponent
+    SidebarComponent,
+    IsLoadingButtonComponent
   ],
   imports: [
     CommonModule,
@@ -20,7 +22,8 @@ import { RouterModule } from '@angular/router';
   exports:[
     FooterComponent,
     NavBarComponent,
-    SidebarComponent
+    SidebarComponent,
+    IsLoadingButtonComponent,
   ]
 })
 export class SharedModule { }

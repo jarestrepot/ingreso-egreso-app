@@ -20,7 +20,8 @@ export class LayoutComponent implements OnInit, OnDestroy {
   ){
     const swal = new SwalHelpers();
     swal.showAlertEmptyOptions();
-    const subAuth = this.authService.initAuthListener().subscribe(
+    const subAuth = this.authService.initAuthListener()
+    .subscribe(
       {
         next: (data) => {
           if( data ){
