@@ -9,6 +9,4 @@ export class IsLoadingButtonComponent {
 
   @Input({ required: true }) text:string = '';
   @Input({ required: false }) classBtn: string = 'btn btn-primary submit-btn btn-block';
-
-
 }

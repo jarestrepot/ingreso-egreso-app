@@ -29,6 +29,7 @@
       "@icomeEgress/*": ["./src/app/icome-egress/*"],
       "@dashboard/*": ["./src/app/dashboard/*"],
       "@environments/*": ["./src/app/environments/*"],
+      "@models/*": ["./src/app/models/*"],
     }
   },
   "angularCompilerOptions": {
