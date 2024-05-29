@@ -6,17 +6,25 @@ import { IcomeEgressComponent } from './pages/icome-egress/icome-egress.componen
 import { StadisticComponent } from './pages/stadistic/stadistic.component';
 import { DashboardComponent } from './pages/layaout-page/dashboard.component';
 import { SharedModule } from '@shared/shared.module';
+import { ReactiveFormsModule } from '@angular/forms';
+import { IcomeEgressService } from './services/icome-egress.service';
 
 
 
 @NgModule({
   declarations: [
-    DashboardComponent
+    DashboardComponent,
+    IcomeEgressComponent,
+    StadisticComponent,
   ],
   imports: [
     CommonModule,
     DashboardRoutingModule,
-    SharedModule
+    SharedModule,
+    ReactiveFormsModule,
+  ],
+  providers: [
+    IcomeEgressService
   ]
 })
 export class DashboardModule { }

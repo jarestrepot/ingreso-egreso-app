@@ -15,6 +15,12 @@ export class AuthError extends Error {
     Object.setPrototypeOf(this, AuthError.prototype);
   }
 
+
+
+  public static error(name: string, message: string, stack?: string | undefined, cause?: Record<string, string> | any){
+    return new AuthError(name, message,stack, cause)
+  }
+
   getError(): this {
     return this;
   }
@@ -51,6 +57,7 @@ export class AuthError extends Error {
     this.cause = cause;
   }
 
+
   async getSwalModalError(){
     try{
       return await Swal.fire(
@@ -65,6 +72,16 @@ export class AuthError extends Error {
     catch(e: unknown){
       return this;
     }
+  }
+
+  public static async getSwalSuccessMessage( message:string, title:string ){
+      return await Swal.fire(
+        {
+          icon: "success",
+          title: title,
+          text: message,
+        }
+      );
   }
 
 }

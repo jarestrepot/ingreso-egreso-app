@@ -1,7 +1,7 @@
 import { Injectable, NgZone } from '@angular/core';
 import * as User from '@auth/interfaces/user.interface';
 import { AngularFireAuth } from '@angular/fire/compat/auth';
-import { Firestore, collection, collectionData, doc, deleteDoc, getDoc, setDoc } from '@angular/fire/firestore';
+import { Firestore, collection, collectionData, doc, deleteDoc, getDoc, setDoc, CollectionReference, DocumentData } from '@angular/fire/firestore';
 
 // NgRx Store
 import { Store } from '@ngrx/store';
@@ -12,6 +12,7 @@ import { AuthError } from './errorSevrice.class';
 import { Observable, Subscription, map, tap } from 'rxjs';
 import { UserEntity } from 'src/app/models/usuario.model';
 import { UserR } from '@auth/interfaces/user.response.interface';
+import { environments } from 'src/environments/environmets';
 
 
 @Injectable({
@@ -20,7 +21,13 @@ import { UserR } from '@auth/interfaces/user.response.interface';
 export class AuthService {
 
   #userSubcription!: Subscription;
-  userData!: any | undefined;
+  private userData!: any | undefined;
+  public usersCollection: CollectionReference<DocumentData>;
+  public collectionsNames = environments.collections;
+
+  get user(){
+    return { ...this.userData }
+  }
   constructor(
     private ngZone: NgZone,
     private firebaseAuthenticationService: AngularFireAuth, // Service to Fire
@@ -29,6 +36,7 @@ export class AuthService {
   ) {
     //Observa Setear el localStorage con los datos del usuario
     this.initAuthListener();
+    this.usersCollection = collection(this.fireStore,this.collectionsNames.USERS);
   }
 
   initAuthListener(){
@@ -62,7 +70,7 @@ export class AuthService {
       if( user ){
         this.userData = user;
         const newUser = new UserEntity( user.uid, name , email );
-        const userDocRef = doc(this.fireStore, `users`, user.uid); // Add uid the path. Ensure the creation of the route with the firebase id
+        const userDocRef = doc(this.fireStore, this.collectionsNames.USERS, user.uid); // Add uid the path. Ensure the creation of the route with the firebase id
         await setDoc(userDocRef, { ...newUser });
         return this.userData;
       }
@@ -74,17 +82,17 @@ export class AuthService {
   }
 
   getUsers(): Observable<User.UserDatabase[]> {
-    const usersFirebase = collection( this.fireStore, 'users');
+    const usersFirebase = collection(this.fireStore, this.collectionsNames.USERS);
     return collectionData( usersFirebase, { idField: 'id' } ) as Observable<User.UserDatabase[]>;
   }
 
   deleteUsers( user: User.UserDatabase ){
-    const userDocRef = doc( this.fireStore, `users/${user.id}`);
+    const userDocRef = doc(this.fireStore, `${this.collectionsNames.USERS}/${user.id}`);
     return deleteDoc( userDocRef );
   }
 
   async getUser( id: string ): Promise<User.UserDatabase>{
-    const userDocRef = (await getDoc(doc(this.fireStore, `/users/${id}`))).data() as User.UserDatabase;
+    const userDocRef = (await getDoc(doc(this.fireStore, `/${this.collectionsNames.USERS}/${id}`))).data() as User.UserDatabase;
     this.userData = userDocRef;
     return userDocRef;
   }
