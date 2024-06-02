@@ -17,9 +17,9 @@ export class IcomeEgressComponent {
 
   constructor(private fb: FormBuilder, private icomeEgressService: IcomeEgressService){
     this.icomeEgressForm = this.fb.group({
-      description: ['aaaaaaaaaaa', [Validators.required, Validators.minLength(5)]],
-      amount: ['100', [Validators.required, Validators.min(0.111)]],
-      type: ['', [Validators.required, ValidatorsClass.hasType]]
+      description: ['', [Validators.required, Validators.minLength(5)]],
+      amount: ['', [Validators.required, Validators.min(0.111)]],
+      type: ['', [Validators.required, ValidatorsClass.hasType()]]
     });
   }
 
