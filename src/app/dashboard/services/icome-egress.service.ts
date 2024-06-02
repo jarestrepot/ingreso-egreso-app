@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { IcomeEgress } from '@models/ingreso-egreso.model';
-import { Firestore, doc, deleteDoc, getDoc, setDoc, addDoc } from '@angular/fire/firestore';
+import { Firestore, doc, deleteDoc, getDoc, setDoc, addDoc, collection } from '@angular/fire/firestore';
 import { AuthService } from '@auth/services/auth.service';
 import { DashboardModule } from '@dashboard/dashboard.module';
 import { IcomeEgressInterface } from 'src/app/utils/interfaces/icomeEgress.interface';
@@ -20,10 +20,12 @@ export class IcomeEgressService {
   async createIcomeEgress(icomeEgressInteface: IcomeEgressInterface ): Promise<boolean> {
     // ** Añadir un documento **//
     const id = this.authService.user.id;
-    const docRef = doc(this.fireStore, this.authService.collectionsNames.ICOME_EGRESS, id );
+    const docRef = doc( this.fireStore, this.authService.collectionsNames.ICOME_EGRESS, id);
+    const subCollectionRef = collection(docRef, 'items');
+    const newDocRef = doc(subCollectionRef);
     let icomeEgressClass = IcomeEgress.fromFirebase(icomeEgressInteface, id);
     try{
-      await setDoc(docRef, { id, ...icomeEgressClass});
+      await setDoc(newDocRef, { ...icomeEgressClass});
       // Activar modal.
       return true;
     }catch( e ){
