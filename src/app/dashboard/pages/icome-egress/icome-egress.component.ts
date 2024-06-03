@@ -3,7 +3,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { AuthError } from '@auth/services/errorSevrice.class';
 import { IcomeEgressService } from '@dashboard/services/icome-egress.service';
 import { IcomeEgressInterface } from 'src/app/utils/interfaces/icomeEgress.interface';
-import { ValidatorsClass } from 'src/app/utils/validators/ValidatorsClass';
+import { ValidatorsCustom } from 'src/app/utils/validators/ValidatorsClass';
 import { TypeIcomeEgrees } from 'src/app/utils/validators/enumTypes';
 
 @Component({
@@ -19,11 +19,9 @@ export class IcomeEgressComponent {
     this.icomeEgressForm = this.fb.group({
       description: ['', [Validators.required, Validators.minLength(5)]],
       amount: ['', [Validators.required, Validators.min(0.111)]],
-      type: ['', [Validators.required, ValidatorsClass.hasType()]]
+      type: ['', [Validators.required, ValidatorsCustom.hasType()]]
     });
   }
-
-
   async saveIcomeEgress(){
 
     if( this.icomeEgressForm.invalid ) {

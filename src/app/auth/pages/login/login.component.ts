@@ -10,6 +10,7 @@ import { Store } from '@ngrx/store';
 import * as ui from '@shared/ui.actions';
 import { Subscription } from 'rxjs';
 import { AppState } from 'src/app/store/app.reducer';
+import { ValidatorsCustom } from 'src/app/utils/validators/ValidatorsClass';
 
 
 @Component({
@@ -31,8 +32,8 @@ export class LoginComponent implements OnDestroy {
     private store: Store<AppState>
   ){
     this.loginForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      password: ['', [Validators.required, Validators.minLength(6)]]
+      email: ['', [Validators.required, ValidatorsCustom.emailAddress()]],
+      password: ['', [Validators.required, Validators.minLength(8)]]
     });
     const subUi = this.store.select('ui').subscribe({
       next: ({ isLoading }) => this.isLoading = isLoading

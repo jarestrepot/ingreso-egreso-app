@@ -2,13 +2,13 @@ import { ChangeDetectionStrategy, Component, OnDestroy, OnInit, inject } from '@
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
 import * as User from '@auth/interfaces/user.interface';
-import { SwalHelpers } from '@auth/services/SwalHelpers';
 import { AuthService } from '@auth/services/auth.service';
 import { AuthError } from '@auth/services/errorSevrice.class';
 import { Store } from '@ngrx/store';
 import * as ui from '@shared/ui.actions';
 import { Subscription } from 'rxjs';
 import { AppState } from 'src/app/store/app.reducer';
+import { ValidatorsCustom } from 'src/app/utils/validators/ValidatorsClass';
 
 @Component({
   selector: 'app-register',
@@ -27,12 +27,20 @@ export class RegisterComponent implements OnInit, OnDestroy {
   public isLoadingUi:boolean = false;
 
   ngOnInit(): void {
-    this.registerForm = this.fb.group({
-      email: ['', [Validators.required, Validators.email]],
-      name: ['', [Validators.required, Validators.minLength(3)]],
-      password: ['', [Validators.required, Validators.minLength(6)]],
-      confirmPassword: ['', [Validators.required, Validators.minLength(6)]], // TODO: Validator password
-    });
+    this.registerForm = this.fb.group(
+      {
+        email: ['', [Validators.required, ValidatorsCustom.emailAddress()]],
+        name: ['', [Validators.required, Validators.minLength(3)]],
+        password: ['', [Validators.required, Validators.minLength(8)]],
+        confirmPassword: ['', [Validators.required, Validators.minLength(8)]],
+      },
+      {
+        validators: ValidatorsCustom.mustBeEquals(
+          'password',
+          'confirmPassword'
+        )
+      }
+  );
     const uiSub = this.#store.select('ui').subscribe({
       next: ({ isLoading }) => this.isLoadingUi = isLoading
     });

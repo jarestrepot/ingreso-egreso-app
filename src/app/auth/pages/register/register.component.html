@@ -68,13 +68,16 @@
                   <span class="input-group-text">
                     <i
                       [class.accepted]="this.registerForm.controls['password'].valid"
-                      [class.touched]="this.registerForm.controls['password'].touched && this.registerForm.controls['password'].invalid"
+                      [class.touched]="this.registerForm.controls['password'].touched
+                      && this.registerForm.controls['password'].invalid"
                       class="fa fa-check-circle"
                     ></i>
                   </span>
                 </div>
               </div>
-              <span *ngIf="this.registerForm.controls['password'].touched && this.registerForm.controls['password'].invalid" class="touched">
+              <span *ngIf="this.registerForm.controls['password'].touched
+                        && this.registerForm.controls['password'].invalid"
+                      class="touched">
                 This is field is required
               </span>
             </div>
@@ -90,7 +93,7 @@
                 <div class="input-group-append">
                   <span class="input-group-text">
                     <i
-                      [class.accepted]="this.registerForm.controls['confirmPassword'].valid"
+                      [class.accepted]="this.registerForm.controls['confirmPassword'].valid && !this.registerForm.getError('mustBeEqual')"
                       [class.touched]="this.registerForm.controls['confirmPassword'].touched && this.registerForm.controls['confirmPassword'].invalid"
                       class="fa fa-check-circle"></i>
                   </span>
@@ -99,6 +102,9 @@
               <span *ngIf="this.registerForm.controls['confirmPassword'].touched && this.registerForm.controls['confirmPassword'].invalid"
                 class="touched">
                 This is field is required
+              </span>
+              <span class="touched" *ngIf="this.registerForm.controls['confirmPassword'].touched && this.registerForm.getError('mustBeEqual')">
+                Passwords do not match
               </span>
             </div>
 
