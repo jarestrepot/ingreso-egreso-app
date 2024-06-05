@@ -1,26 +1,28 @@
 import { Injectable } from '@angular/core';
 import { IcomeEgress } from '@models/ingreso-egreso.model';
-import { Firestore, doc, deleteDoc, getDoc, setDoc, addDoc, collection } from '@angular/fire/firestore';
+import { Firestore, doc, deleteDoc, getDoc, setDoc, addDoc, collection, CollectionReference, DocumentData, collectionData } from '@angular/fire/firestore';
 import { AuthService } from '@auth/services/auth.service';
 import { DashboardModule } from '@dashboard/dashboard.module';
 import { IcomeEgressInterface } from 'src/app/utils/interfaces/icomeEgress.interface';
+import { environments } from 'src/environments/environmets';
 
 @Injectable({
   providedIn: DashboardModule
 })
 export class IcomeEgressService {
 
+  private uid?:string;
   constructor(
     private fireStore: Firestore,
-    private authService: AuthService,
   ) {
 
   }
 
-  async createIcomeEgress(icomeEgressInteface: IcomeEgressInterface): Promise<boolean> {
+  async createIcomeEgress(icomeEgressInteface: IcomeEgressInterface):Promise<boolean> {
     // ** Añadir un documento **//
-    const id = this.authService.user.id;
-    const docRef = doc(this.fireStore, this.authService.collectionsNames.ICOME_EGRESS, id);
+    if( !this.uid ) return false;
+    const id = this.uid;
+    const docRef = doc(this.fireStore, environments.collections.ICOME_EGRESS, id);
     const subCollectionRef = collection(docRef, 'items');
     const newDocRef = doc(subCollectionRef);
     let icomeEgressClass = IcomeEgress.fromFirebase(icomeEgressInteface, id);
@@ -31,5 +33,20 @@ export class IcomeEgressService {
     } catch (e) {
       return false;
     }
+  }
+
+  /**
+   *
+   * @param uid 
+   */
+  initIcomesEgressListeners(uid: string) {
+    this.uid = uid;
+    const path:string = `${environments.collections.ICOME_EGRESS}/${uid}/items`;
+    const itemsIcomeEgress:CollectionReference<DocumentData, DocumentData> = collection(this.fireStore, path);
+    // Subcription firebaseData
+    collectionData(itemsIcomeEgress).subscribe({
+      next: (data) => console.log( data ),
+      error: (err) => console.log( err )
+    });
   }
 }

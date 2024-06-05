@@ -58,7 +58,7 @@ export class AuthError extends Error {
   }
 
 
-  async getSwalModalError(){
+  public async getSwalModalError(){
     try{
       return await Swal.fire(
         {

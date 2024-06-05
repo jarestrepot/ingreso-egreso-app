@@ -58,7 +58,6 @@ export class IcomeEgressComponent implements OnInit, OnDestroy {
 
     this.store.dispatch( uiStore.isLoading() );
 
-
     let { description, amount, type } = this.icomeEgressForm.value;
     const model:IcomeEgressInterface = {
       description: description,
@@ -69,8 +68,9 @@ export class IcomeEgressComponent implements OnInit, OnDestroy {
     if( await this.icomeEgressService.createIcomeEgress(model) ) {
       AuthError.getSwalSuccessMessage('Created sucessfull', 'Success');
     }else {
+      // Cambiar a función statica
       const error = new AuthError('Error', 'Error creating Icome/Egress');
-      error.getSwalModalError();
+      // await error.getSwalModalError();
       this.icomeEgressForm.markAllAsTouched();
     }
 
