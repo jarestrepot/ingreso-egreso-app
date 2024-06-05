@@ -1,7 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnDestroy } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Router } from '@angular/router';
-import { SwalHelpers } from '@auth/services/SwalHelpers';
 import { AuthService } from '@auth/services/auth.service';
 import { AuthError } from '@auth/services/errorSevrice.class';
 
