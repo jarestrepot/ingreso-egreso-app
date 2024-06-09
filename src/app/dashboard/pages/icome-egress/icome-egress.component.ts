@@ -70,7 +70,7 @@ export class IcomeEgressComponent implements OnInit, OnDestroy {
     }else {
       // Cambiar a función statica
       const error = new AuthError('Error', 'Error creating Icome/Egress');
-      // await error.getSwalModalError();
+      await error.getSwalModalError();
       this.icomeEgressForm.markAllAsTouched();
     }
 

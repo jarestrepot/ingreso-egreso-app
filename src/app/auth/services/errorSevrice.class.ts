@@ -15,8 +15,6 @@ export class AuthError extends Error {
     Object.setPrototypeOf(this, AuthError.prototype);
   }
 
-
-
   public static error(name: string, message: string, stack?: string | undefined, cause?: Record<string, string> | any){
     return new AuthError(name, message,stack, cause)
   }
@@ -63,8 +61,8 @@ export class AuthError extends Error {
       return await Swal.fire(
         {
           icon: "error",
-          title: this.name,
-          text: this.message,
+          title: this.name ?? 'Error',
+          text: this.message ?? 'This is an error',
           footer: this.cause.message,
         }
       );

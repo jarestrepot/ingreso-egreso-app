@@ -3,10 +3,10 @@ import { IcomeEgressInterface } from "../utils/interfaces/icomeEgress.interface"
 export class IcomeEgress {
 
   constructor(
-    private uid: string | null,
-    private description: string,
-    private amount: number,
-    private type: string,
+    public uid: string | null,
+    public description: string,
+    public amount: number,
+    public type: string,
   ){}
 
   public static fromFirebase({ description, amount, type }: IcomeEgressInterface, uid: string){

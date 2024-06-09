@@ -1,8 +1,10 @@
 import { Component, OnDestroy } from '@angular/core';
 import { IcomeEgressService } from '@dashboard/services/icome-egress.service';
+import * as IcomeEgressActions from '@dashboard/store/icome-egress.actions';
 import { Store } from '@ngrx/store';
-import { Subscription, filter } from 'rxjs';
 import { AppState } from 'src/app/store/app.reducer';
+import { Subscription, filter } from 'rxjs';
+import { IcomeEgress } from '@models/ingreso-egreso.model';
 
 @Component({
   selector: 'app-dashboard',
@@ -21,6 +23,16 @@ export class DashboardComponent implements OnDestroy {
       next: ({ user }) => {
         if( !user ) return;
         this.icomeEgressService.initIcomesEgressListeners( user.getId() );
+        const sub = this.icomeEgressService.getDataRefObservable()
+          .subscribe((data) => {
+            const newData = data.map( ({ doc, change }) =>{
+              return {
+                ...doc,
+              }
+            }) as IcomeEgress[];
+            this.store.dispatch(IcomeEgressActions.setItems({ items: newData }) );
+          });
+        this.#unSubcibe.push( sub );
       }
     });
     this.#unSubcibe.push( subUserStore );
@@ -28,6 +40,7 @@ export class DashboardComponent implements OnDestroy {
 
   ngOnDestroy(): void {
     this.#unSubcibe.forEach(sub => sub.unsubscribe());
+    this.icomeEgressService.unsubscribeService();
   }
 
 
