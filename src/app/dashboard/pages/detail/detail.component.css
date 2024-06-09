@@ -1,0 +1,28 @@
+td{
+  font-size: 1rem;
+  font-weight: 600;
+}
+th{
+  font-size: 1.5rem;
+  font-weight: bold;
+}
+thead{
+  & th{
+    background: rgb(152, 172, 165);
+    border-radius: .4rem;
+    background: -webkit-linear-gradient(rgb(31, 130, 179), red);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      color: tomato;
+  }
+}
+button{
+  background: -webkit-linear-gradient(rgb(243, 201, 18), red);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    &:hover{
+      scale: 1.1;
+      transition: all .2s ease-in-out;
+    }
+}
+

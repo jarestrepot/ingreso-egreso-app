@@ -75,7 +75,6 @@ export class IcomeEgressService implements UnsubscribeInterface {
             }
           }
         });
-        // const data = snapshot.docs.map(doc => ({ id: doc.id, ...doc.data() }));
         this.#dataRefSubject.next(dataRef);
       },
       (error) => {

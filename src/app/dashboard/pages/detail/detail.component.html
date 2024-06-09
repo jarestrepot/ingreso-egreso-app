@@ -11,22 +11,36 @@
               <th>Descripción</th>
               <th>Monto</th>
               <th>Tipo</th>
-              <th></th>
+              <th>Acciones</th>
             </tr>
           </thead>
 
           <tbody>
-            <tr>
-              <td>Descripción</td>
-              <td>Monto</td>
-              <td>Tipo</td>
-              <td>acciones</td>
+            <tr
+              *ngFor="let item of icomeEgress"
+            >
+              <td>{{ item.description }}</td>
+              <td>{{ item.amount|currency }}</td>
+              <td
+                [ngClass]="{
+                  'text-danger': item.type === 'Icome',
+                  'text-success': item.type === 'Egress'
+                }"
+              >
+                {{ item.type }}
+              </td>
+              <td>
+                <button
+                  type="button"
+                  (click)="deleteItem(item.uid ?? '1')"
+                  class="btn btn-danger">
+                  <i class="fa fa-trash"></i>
+                  Delete
+                </button>
+              </td>
             </tr>
           </tbody>
-
         </table>
-
-
       </div>
     </div>
   </div>

@@ -7,6 +7,7 @@ import { Firestore, collection, collectionData, doc, deleteDoc, getDoc, setDoc, 
 import { Store } from '@ngrx/store';
 import { AppState } from 'src/app/store/app.reducer';
 import * as UserStore from '@auth/authStore/auth.actions';
+import * as IcomeEgress from '@dashboard/store/icome-egress.actions';
 
 import { AuthError } from './errorSevrice.class';
 import { Observable, Subscription, map, tap } from 'rxjs';
@@ -54,11 +55,13 @@ export class AuthService {
               localStorage.setItem('userData', 'null');
               // Hacer en unset del usuario.
               this.store.dispatch(UserStore.unSetuser());
+              this.store.dispatch( IcomeEgress.unSetItems() );
             }
           } else {
             localStorage.setItem('userData', 'null');
             // Hacer en unset del usuario.
             this.store.dispatch( UserStore.unSetuser() );
+            this.store.dispatch(IcomeEgress.unSetItems());
           }
         })
       );

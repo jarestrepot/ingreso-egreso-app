@@ -16,6 +16,7 @@ import { IcomeEgressService } from './services/icome-egress.service';
     DashboardComponent,
     IcomeEgressComponent,
     StadisticComponent,
+    DetailComponent
   ],
   imports: [
     CommonModule,
