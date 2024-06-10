@@ -8,6 +8,7 @@ import { DashboardComponent } from './pages/layaout-page/dashboard.component';
 import { SharedModule } from '@shared/shared.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { IcomeEgressService } from './services/icome-egress.service';
+import { OrderIcomePipe } from './pipes/order-icome.pipe';
 
 
 
@@ -16,7 +17,8 @@ import { IcomeEgressService } from './services/icome-egress.service';
     DashboardComponent,
     IcomeEgressComponent,
     StadisticComponent,
-    DetailComponent
+    DetailComponent,
+    OrderIcomePipe
   ],
   imports: [
     CommonModule,

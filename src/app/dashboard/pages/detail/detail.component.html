@@ -8,16 +8,25 @@
         <table class="table">
           <thead>
             <tr>
-              <th>Descripción</th>
-              <th>Monto</th>
-              <th>Tipo</th>
+              <th (click)="sortProperty('description')">
+                  Descripción
+                  <i class="fa fa-sort" aria-hidden="true"></i>
+              </th>
+              <th (click)="sortProperty('amount')"
+                >Monto
+                <i class="fa fa-sort" aria-hidden="true"></i>
+              </th>
+              <th (click)="sortProperty('type')">
+                  Tipo
+                  <i class="fa fa-sort" aria-hidden="true"></i>
+              </th>
               <th>Acciones</th>
             </tr>
           </thead>
 
           <tbody>
             <tr
-              *ngFor="let item of icomeEgress"
+              *ngFor="let item of icomeEgress | orderIcome:someProperty:sortReverse"
             >
               <td>{{ item.description }}</td>
               <td>{{ item.amount|currency }}</td>
@@ -34,7 +43,7 @@
                   type="button"
                   (click)="deleteItem(item.uid ?? '1')"
                   class="btn btn-danger">
-                  <i class="fa fa-trash"></i>
+                    <i class="fa fa-trash"></i>
                   Delete
                 </button>
               </td>

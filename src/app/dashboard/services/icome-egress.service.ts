@@ -102,4 +102,10 @@ export class IcomeEgressService implements UnsubscribeInterface {
       console.error(e)
     }
   }
+
+  async deleteIcomeEgress(idItem: string): Promise<void>{
+    const path: string = `${environments.collections.ICOME_EGRESS}/${this.uid}/${environments.collections.ITEMS}/${idItem}`;
+    const docRef = doc(this.fireStore, path);
+    return await deleteDoc( docRef );
+  }
 }

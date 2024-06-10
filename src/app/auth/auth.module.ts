@@ -6,6 +6,7 @@ import { AuthRoutingsModule } from './auth-routing.module';
 import { LayoutComponent } from './pages/layout/layout.component';
 import { ReactiveFormsModule } from '@angular/forms';
 import { SharedModule } from '@shared/shared.module';
+import { AuthService } from './services/auth.service';
 
 
 
@@ -15,6 +16,7 @@ import { SharedModule } from '@shared/shared.module';
     RegisterComponent,
     LayoutComponent
   ],
+  // providers: [ AuthService ], // Se provee el servicio de authService. solo en este modulo.
   imports: [
     CommonModule,
     AuthRoutingsModule,

@@ -14,6 +14,14 @@ thead{
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
       color: tomato;
+    &:hover{
+      background: -webkit-linear-gradient(rgb(113, 58, 189),rgb(31, 130, 179));
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        color: rgb(190, 149, 142);
+      cursor: pointer;
+      transition: all .2s linear;
+    }
   }
 }
 button{
