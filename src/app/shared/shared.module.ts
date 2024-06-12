@@ -5,6 +5,7 @@ import { NavBarComponent } from './nav-bar/nav-bar.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { RouterModule } from '@angular/router';
 import { IsLoadingButtonComponent } from './components/is-loading-button/is-loading-button.component';
+import { BasicComponent } from './components/graphics/basic/basic.component';
 
 
 
@@ -13,7 +14,8 @@ import { IsLoadingButtonComponent } from './components/is-loading-button/is-load
     FooterComponent,
     NavBarComponent,
     SidebarComponent,
-    IsLoadingButtonComponent
+    IsLoadingButtonComponent,
+    BasicComponent
   ],
   imports: [
     CommonModule,
@@ -24,6 +26,7 @@ import { IsLoadingButtonComponent } from './components/is-loading-button/is-load
     NavBarComponent,
     SidebarComponent,
     IsLoadingButtonComponent,
+    BasicComponent,
   ]
 })
 export class SharedModule { }

@@ -1,0 +1,34 @@
+<div class="row my-3">
+  <div class="col-12">
+    <div class="card card-statistics">
+      <div class="card-body">
+        <div class="clearfix">
+          <div class="float-left">
+            <i class="fa fa-building text-info icon-lg"></i>
+          </div>
+          <div class="float-right">
+            <p class="mb-0 text-right">Diferencia</p>
+            <div class="fluid-container">
+              <h3 [ngClass]="{
+                      'text-success': icome() - egress() > 0,
+                      'text-danger': icome() - egress() < 0
+                    }" class="font-weight-medium text-right mb-0">
+                {{ icome() - egress() | currency }}
+              </h3>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="col-12 my-3" *ngIf="icome() > 0 || egress() > 0">
+    <div class="card card-statistics">
+      <div class="card-body">
+        <h1 class="card-title">Grafica</h1>
+
+
+      </div>
+    </div>
+  </div>
+</div>

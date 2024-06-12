@@ -1,5 +1,8 @@
 import Swal, { SweetAlertOptions, SweetAlertResult } from "sweetalert2";
 
+/**
+ * TODO: cambiar clase a utils de shared
+ */
 export class SwalHelpers {
   async showAlert(options: SweetAlertOptions): Promise<SweetAlertResult> {
     return await Swal.fire(options);

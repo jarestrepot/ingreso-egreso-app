@@ -10,7 +10,7 @@
           <div class="float-right">
             <p class="mb-0 text-right">Ingresos</p>
             <div class="fluid-container">
-              <h3 class="font-weight-medium text-right mb-0">$65,650</h3>
+              <h3 class="font-weight-medium text-right mb-0">{{ icomeStore()|currency }}</h3>
             </div>
           </div>
         </div>
@@ -30,9 +30,9 @@
             <i class="fa fa-shipping-fast text-danger icon-lg"></i>
           </div>
           <div class="float-right">
-            <p class="mb-0 text-right">Ingresos</p>
+            <p class="mb-0 text-right">Egreso</p>
             <div class="fluid-container">
-              <h3 class="font-weight-medium text-right mb-0">$65,650</h3>
+              <h3 class="font-weight-medium text-right mb-0">{{ egressStore()|currency }}</h3>
             </div>
           </div>
         </div>
@@ -42,4 +42,7 @@
       </div>
     </div>
   </div>
+
+  <!-- Add component basic grafica -->
+  <shared-basic-graph [dataGraph]="{ icome : icomeStore(), egress: egressStore() }" />
 </div>
