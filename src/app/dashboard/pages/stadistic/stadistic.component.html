@@ -44,5 +44,10 @@
   </div>
 
   <!-- Add component basic grafica -->
-  <shared-basic-graph [dataGraph]="{ icome : icomeStore(), egress: egressStore() }" />
+  <shared-basic-graph [dataGraph]="{ icome : icomeStore(), egress: egressStore() }" >
+  </shared-basic-graph>
+
+  <canvas id="chart">{{ chart }}</canvas>
+
+
 </div>

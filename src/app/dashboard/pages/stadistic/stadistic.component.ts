@@ -1,20 +1,22 @@
-import { Component, OnDestroy, signal } from '@angular/core';
+import { Component, OnDestroy, OnInit, effect, signal } from '@angular/core';
 import { SwalHelpers } from '@auth/services/SwalHelpers';
 import { Store } from '@ngrx/store';
-import { Subscription, delay, map } from 'rxjs';
+import { Subscription, map } from 'rxjs';
 import { AppState } from 'src/app/store/app.reducer';
+import Chart, { ChartType } from 'chart.js/auto';
 
 @Component({
   selector: 'app-stadistic',
   templateUrl: './stadistic.component.html',
   styleUrls: ['./stadistic.component.css']
 })
-export class StadisticComponent implements OnDestroy{
+export class StadisticComponent implements OnInit, OnDestroy{
 
   #unsubscribe:Subscription[] = [];
   icomeStore = signal<number>(0);
   egressStore = signal<number>(0);
   swalSignal = signal<SwalHelpers>(new SwalHelpers());
+  public chart!: Chart;
   constructor( private store:Store<AppState> ){
     // Empezar modal de espera
     this.swalSignal().showAlertEmptyOptions();
@@ -42,9 +44,32 @@ export class StadisticComponent implements OnDestroy{
     });
     this.#unsubscribe.push( subIE );
     this.swalSignal().closeSwal();
+    effect( () => {
+      if ( this.icomeStore() === 0 && this.icomeStore() === 0 ) return;
+      const data = {
+        labels: [
+          'Icome',
+          'Egress',
+        ],
+        datasets: [{
+          label: 'Values',
+          data: [this.icomeStore(), this.egressStore()],
+          backgroundColor: [
+            'rgb(255, 99, 132)',
+            'rgb(54, 162, 235)',
+          ],
+          hoverOffset: 2
+        }]
+      };
+      // Creamos la gráfica
+      this.chart = new Chart("chart", {
+        type: 'pie' as ChartType, // tipo de la gráfica
+        data // datos
+      });
+    })
   }
 
-  loadingDataInit(){
+  ngOnInit(): void {
 
   }
 
