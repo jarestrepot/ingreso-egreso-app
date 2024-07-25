@@ -15,16 +15,25 @@ export const routesDashboard: Routes= [
         path: 'stadistic',
         component: StadisticComponent,
         title: 'Stadistic',
+        data: {
+          class: 'menu-icon fa fa-tachometer-alt'
+        }
       },
       {
         path: 'icome-egress',
         component: IcomeEgressComponent,
-        title: 'Icome Egress'
+        title: 'Icome Egress',
+        data: {
+          class: 'menu-icon fa fa-clipboard-list'
+        }
       },
       {
         path: 'detail',
         component: DetailComponent,
-        title: 'Detail'
+        title: 'Detail',
+        data: {
+          class: 'menu-icon fa fa-table'
+        }
       },
       {
         path: '**',

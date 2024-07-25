@@ -4,12 +4,12 @@
       <div class="nav-link">
         <div class="user-wrapper">
           <div class="profile-image">
-            <img src="assets/images/faces/face1.jpg" alt="profile image">
+            <img src="assets/images/faces/avatar.webp" alt="profile image">
           </div>
           <div class="text-wrapper">
-            <p class="profile-name">Cristobal Colón</p>
+            <p class="profile-name">{{ userEntity?.getName() }}</p>
             <div>
-              <small class="designation text-muted">Gerente</small>
+              <small class="designation text-muted">{{ userEntity?.getEmail() }}</small>
             </div>
           </div>
         </div>
@@ -17,29 +17,10 @@
     </li>
 
 
-    <li class="nav-item">
-      <a routerLink="stadistic" routerLinkActive="active" class="nav-link">
-        <i class="menu-icon fa fa-tachometer-alt"></i>
-        <span class="menu-title">Dashboard</span>
-      </a>
-    </li>
-
-    <li class="nav-item">
-      <a routerLink="icome-egress"
-        routerLinkActive="active"
-      class="nav-link">
-        <i class="menu-icon fa fa-clipboard-list"></i>
-        <span class="menu-title">Ingresos y Egresos</span>
-      </a>
-    </li>
-
-    <li class="nav-item">
-      <a
-        routerLink="detail"
-        routerLinkActive="active"
-        class="nav-link">
-        <i class="menu-icon fa fa-table"></i>
-        <span class="menu-title">Detalle</span>
+    <li class="nav-item" *ngFor="let route of routes; index as i">
+      <a [routerLink]="route.path" routerLinkActive="active" class="nav-link">
+        <i [class]="route.data?.['class']"></i>
+        <span class="menu-title">{{ route.title }}</span>
       </a>
     </li>
 

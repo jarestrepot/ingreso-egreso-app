@@ -7,7 +7,6 @@ import * as authUser from '@auth/authStore/auth.reducer';
 export interface AppState {
   ui: UI.State,
   user: authUser.StateUser,
-
 }
 
 
