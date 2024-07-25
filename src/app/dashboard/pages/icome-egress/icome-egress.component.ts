@@ -33,7 +33,6 @@ export class IcomeEgressComponent implements OnInit, OnDestroy {
     });
   }
 
-
   ngOnInit(): void {
     const subUi = this.store.select('ui').subscribe({
       next: ({ isLoading }) => {

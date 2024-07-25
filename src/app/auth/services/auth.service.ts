@@ -21,7 +21,6 @@ import { environments } from 'src/environments/environmets';
 })
 export class AuthService {
 
-  #userSubcription!: Subscription;
   private userData!: any | undefined;
   public usersCollection: CollectionReference<DocumentData>;
   public collectionsNames = environments.collections;
@@ -30,7 +29,6 @@ export class AuthService {
     return { ...this.userData }
   }
   constructor(
-    private ngZone: NgZone,
     private firebaseAuthenticationService: AngularFireAuth, // Service to Fire
     private fireStore: Firestore,
     private store: Store<AppState>
@@ -55,12 +53,12 @@ export class AuthService {
               localStorage.setItem('userData', 'null');
               // Hacer en unset del usuario.
               this.store.dispatch(UserStore.unSetuser());
-              this.store.dispatch( IcomeEgress.unSetItems() );
+              this.store.dispatch(IcomeEgress.unSetItems());
             }
           } else {
             localStorage.setItem('userData', 'null');
             // Hacer en unset del usuario.
-            this.store.dispatch( UserStore.unSetuser() );
+            this.store.dispatch(UserStore.unSetuser());
             this.store.dispatch(IcomeEgress.unSetItems());
           }
         })

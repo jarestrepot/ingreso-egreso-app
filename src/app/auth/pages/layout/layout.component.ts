@@ -16,7 +16,6 @@ export class LayoutComponent implements OnInit, OnDestroy {
   constructor(
     private authService: AuthService,
     private route: Router,
-
   ){
     const swal = new SwalHelpers();
     swal.showAlertEmptyOptions();

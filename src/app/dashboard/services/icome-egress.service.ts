@@ -1,8 +1,6 @@
 import { Injectable } from '@angular/core';
 import { IcomeEgress } from '@models/ingreso-egreso.model';
-import { Firestore, doc, deleteDoc, getDoc, setDoc, addDoc, collection, CollectionReference, DocumentData, collectionData, onSnapshot, QuerySnapshot, DocumentChangeType } from '@angular/fire/firestore';
-
-import { DashboardModule } from '@dashboard/dashboard.module';
+import { Firestore, doc, deleteDoc, setDoc, collection, CollectionReference, DocumentData, onSnapshot, QuerySnapshot } from '@angular/fire/firestore';
 import { IcomeEgressInterface } from 'src/app/utils/interfaces/icomeEgress.interface';
 import { environments } from 'src/environments/environmets';
 import { Unsubscribe } from '@angular/fire/auth';
@@ -11,7 +9,7 @@ import { Observable, Subject } from 'rxjs';
 import { ResponseItems } from 'src/app/utils/interfaces/responseItems.iterface';
 
 @Injectable({
-  providedIn: DashboardModule
+  providedIn: 'root'
 })
 export class IcomeEgressService implements UnsubscribeInterface {
 
@@ -20,7 +18,7 @@ export class IcomeEgressService implements UnsubscribeInterface {
   #dataRefSubject: Subject<ResponseItems[]> = new Subject();
   constructor(
     private fireStore: Firestore,
-  ) {
+  ){
 
   }
 
@@ -37,6 +35,7 @@ export class IcomeEgressService implements UnsubscribeInterface {
       // Activar modal.
       return true;
     } catch (e) {
+      console.log(e)
       return false;
     }
   }

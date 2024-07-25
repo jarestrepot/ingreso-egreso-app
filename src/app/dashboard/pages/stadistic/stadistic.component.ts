@@ -2,8 +2,9 @@ import { Component, OnDestroy, OnInit, effect, signal } from '@angular/core';
 import { SwalHelpers } from '@auth/services/SwalHelpers';
 import { Store } from '@ngrx/store';
 import { Subscription, map } from 'rxjs';
-import { AppState } from 'src/app/store/app.reducer';
 import Chart, { ChartType } from 'chart.js/auto';
+import { AppStateWhithEgress } from 'src/app/store/appStateWhitEgress.reducer';
+
 
 @Component({
   selector: 'app-stadistic',
@@ -17,33 +18,36 @@ export class StadisticComponent implements OnInit, OnDestroy{
   egressStore = signal<number>(0);
   swalSignal = signal<SwalHelpers>(new SwalHelpers());
   public chart!: Chart;
-  constructor( private store:Store<AppState> ){
+  constructor( private store:Store<AppStateWhithEgress> ){
     // Empezar modal de espera
     this.swalSignal().showAlertEmptyOptions();
+
     const subIE = this.store.select('icomeEgress')
-    .pipe(
-      map( ({ icomeEgress }) => {
-        const { sumI, sumE } = icomeEgress.reduce(
-          (acc, { type, amount }) => {
-            type === 'Egress' ? acc.sumE += amount : acc.sumI += amount
-            return acc;
-          },
-          { sumI: 0, sumE: 0 }
-        );
-        return {
-          'icome': sumI,
-          'egress': sumE,
-        }
-      }),
-    )
-    .subscribe({
-      next: ({ icome, egress }) => {
-        this.egressStore.set( egress );
-        this.icomeStore.set( icome );
-      },
-    });
+      .pipe(
+        map( ({ icomeEgress }) => {
+          const { sumI, sumE } = icomeEgress.reduce(
+            (acc, { type, amount }) => {
+              type === 'Egress' ? acc.sumE += amount : acc.sumI += amount
+              return acc;
+            },
+            { sumI: 0, sumE: 0 }
+          );
+          return {
+            'icome': sumI,
+            'egress': sumE,
+          }
+        }),
+      )
+      .subscribe({
+        next: ({ icome, egress }) => {
+          this.egressStore.set( egress );
+          this.icomeStore.set( icome );
+        },
+      });
+
     this.#unsubscribe.push( subIE );
     this.swalSignal().closeSwal();
+
     effect( () => {
       if ( this.icomeStore() === 0 && this.icomeStore() === 0 ) return;
       const data = {

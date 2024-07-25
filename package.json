@@ -6,7 +6,9 @@
     "start": "ng serve",
     "build": "ng build",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test"
+    "test": "ng test",
+    "backup": "firestore-export -a ./src/backup/icome-egress.json -b ./backup.json",
+    "import:data": "firestore-import -a ./src/backup/icome-egress.json -b ./backup.json"
   },
   "private": true,
   "dependencies": {
@@ -22,6 +24,7 @@
     "@ngrx/store": "^16.1.0",
     "@ngrx/store-devtools": "^16.1.0",
     "bootstrap": "^5.3.3",
+    "chart.js": "^4.4.3",
     "rxjs": "~7.8.0",
     "sweetalert2": "^11.11.0",
     "tslib": "^2.3.0",

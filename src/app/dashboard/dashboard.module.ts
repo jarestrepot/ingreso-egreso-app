@@ -9,6 +9,8 @@ import { SharedModule } from '@shared/shared.module';
 import { ReactiveFormsModule } from '@angular/forms';
 import { IcomeEgressService } from './services/icome-egress.service';
 import { OrderIcomePipe } from './pipes/order-icome.pipe';
+import { StoreModule } from '@ngrx/store';
+import { icomeEgressReducer } from './store/icome-egress.reducer';
 
 
 
@@ -25,6 +27,7 @@ import { OrderIcomePipe } from './pipes/order-icome.pipe';
     DashboardRoutingModule,
     SharedModule,
     ReactiveFormsModule,
+    StoreModule.forFeature('icomeEgress', icomeEgressReducer)
   ],
   providers: [
     IcomeEgressService

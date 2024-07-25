@@ -4,8 +4,7 @@ import { IcomeEgressService } from '@dashboard/services/icome-egress.service';
 import { IcomeEgress } from '@models/ingreso-egreso.model';
 import { Store } from '@ngrx/store';
 import { Subscription } from 'rxjs';
-
-import { AppState } from 'src/app/store/app.reducer';
+import { AppStateWhithEgress } from 'src/app/store/appStateWhitEgress.reducer';
 
 @Component({
   selector: 'app-detail',
@@ -18,7 +17,7 @@ export class DetailComponent implements OnInit, OnDestroy {
   someProperty: keyof IcomeEgress = 'type';
   #unSubscribeItems!: Subscription;
   sortReverse:boolean = false;
-  constructor(private store: Store<AppState>, private icomeEgressService: IcomeEgressService){}
+  constructor(private store: Store<AppStateWhithEgress>, private icomeEgressService: IcomeEgressService){}
 
   ngOnInit(): void {
     this.#unSubscribeItems = this.store.select('icomeEgress')
